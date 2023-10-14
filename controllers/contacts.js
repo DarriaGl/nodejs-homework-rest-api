@@ -10,23 +10,29 @@ const getById = async (req, res, next) => {
   const { contactId } = req.params;
   const data = await contacts.getContactById(contactId);
   if (!data) {
-    throw Errors(404, "Not Found");
+    res.status(404).json({ error: "Not Found" });
+  } else {
+    res.json(data);
   }
-  res.json(data);
 };
 
 const add = async (req, res, next) => {
-  const result = await contacts.addContact(req.body);
-  res.status(201).json(result);
+  try {
+    const result = await contacts.addContact(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 const deleteById = async (req, res, next) => {
   const { contactId } = req.params;
   const data = await contacts.removeContact(contactId);
   if (!data) {
-    throw Errors(404, "Not Found");
+    res.status(404).json({ error: "Not Found" });
+  } else {
+    res.json({ message: "Contact deleted" });
   }
-  return res.json({ message: "contact deleted" });
 };
 
 const updateById = async (req, res, next) => {

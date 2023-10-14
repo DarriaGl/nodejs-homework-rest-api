@@ -3,7 +3,7 @@ const path = require("path");
 const nanoid = import("nanoid");
 const contactsPath = path.join(__dirname, "contacts.json");
 
-const listofContacts = async () => {
+const listContacts = async () => {
   const contactsText = await fs.readFile(contactsPath);
   return JSON.parse(contactsText);
 };
@@ -41,14 +41,18 @@ const updateContact = async (contactId, body) => {
   const id = String(contactId);
   const index = contacts.findIndex((contact) => contact.id === id);
   if (index !== -1) {
-    contacts[index] = { id, ...body };
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return contacts[index];
+    if ("name" in body || "email" in body || "phone" in body) {
+      contacts[index] = { id, ...body };
+      await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+      return contacts[index];
+    } else {
+      throw new Error("Missing fields");
+    }
   }
 };
 
 module.exports = {
-  listofContacts,
+  listContacts,
   getContactById,
   removeContact,
   addContact,

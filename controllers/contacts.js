@@ -35,11 +35,11 @@ const deleteById = async (req, res, next) => {
   }
 };
 
-const updateById = async (req, res, next) => {
+const updateById = async (req, res) => {
   const { contactId } = req.params;
   const data = await contacts.updateContact(contactId, req.body);
   if (!data) {
-    throw Errors(404, "Not Found");
+    throw Errors(404, error.message);
   }
   res.json(data);
 };

@@ -1,2 +1,2 @@
-const { validate } = require("./validate");
-module.exports = { validate };
+const { validateBody } = require("./validate");
+module.exports = { validateBody };

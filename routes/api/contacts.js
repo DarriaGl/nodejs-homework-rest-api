@@ -1,6 +1,6 @@
 const express = require("express");
-const { validate } = require("../../middlewares");
-const { schema } = require("../../schemas/contacts");
+const { validate, validateBody } = require("../../middlewares");
+const schemas = require("../../schemas/contacts");
 
 const ctrl = require("../../controllers/contacts");
 
@@ -10,10 +10,10 @@ router.get("/", ctrl.getAll);
 
 router.get("/:contactId", ctrl.getById);
 
-router.post("/", validate(schema), ctrl.add);
+router.post("/", validateBody(schemas.schema), ctrl.add);
 
 router.delete("/:contactId", ctrl.deleteById);
 
-router.put("/:contactId", validate(schema), ctrl.updateById);
+router.put("/:contactId", validateBody(schemas.schema), ctrl.updateById);
 
 module.exports = router;

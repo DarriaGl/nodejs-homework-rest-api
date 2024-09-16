@@ -35,15 +35,18 @@ const addContact = async ({ name, email, phone }) => {
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return newContact;
 };
-
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
   const id = String(contactId);
   const index = contacts.findIndex((contact) => contact.id === id);
   if (index !== -1) {
-    contacts[index] = { id, ...body };
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return contacts[index];
+    if ("name" in body || "email" in body || "phone" in body) {
+      contacts[index] = { id, ...body };
+      await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+      return contacts[index];
+    } else {
+      throw new Error("Missing fields");
+    }
   }
 };
 
